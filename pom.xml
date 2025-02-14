@@ -8,6 +8,12 @@
     <artifactId>actionTest</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <scm>
+        <connection>scm:git:https://github.com/Bolsei/ActionTest</connection>
+        <developerConnection>scm:git:https://github.com/Bolsei/ActionTest</developerConnection>
+    </scm>
+
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
