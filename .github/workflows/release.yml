@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     name: Release
-
+    permissions: write-all
     runs-on: ubuntu-latest
 
     steps:
