@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        run: |
+          git config --global user.email "t.rudersdorf@gmx.de"
+          git config --global user.name "Bolsei"
+
       - name: Create Release
         id: create_release
         uses: actions/setup-java@v4
@@ -22,4 +26,5 @@ jobs:
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         run: mvn release:prepare release:perform --file pom.xml -Dusername Bolsei
