@@ -4,12 +4,12 @@
 
     <groupId>org.example</groupId>
     <artifactId>actionTest</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <scm>
         <connection>scm:git:https://github.com/Bolsei/ActionTest</connection>
         <developerConnection>scm:git:https://github.com/Bolsei/ActionTest</developerConnection>
-      <tag>HEAD</tag>
+      <tag>actionTest-1.1</tag>
   </scm>
 
 
