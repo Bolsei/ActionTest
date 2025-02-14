@@ -22,4 +22,4 @@ jobs:
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn release:prepare release:perform --file pom.xml
+        run: mvn release:prepare release:perform --file pom.xml -Dusername Bolsei
