@@ -19,8 +19,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script:  "try {
-                        const response = await github.rest.repos.createRelease({
+          script: | 
+            try {
+              const response = await github.rest.repos.createRelease({
                           draft: false,
                           generate_release_notes: true,
                           name: process.env.RELEASE_TAG,
@@ -30,8 +31,8 @@ jobs:
                           tag_name: process.env.RELEASE_TAG,
                         });
 
-                        core.exportVariable('RELEASE_ID', response.data.id);
-          core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
-        } catch (error) {
-          core.setFailed(error.message);
-        }"
+              core.exportVariable('RELEASE_ID', response.data.id);
+              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
+            } catch (error) {
+              core.setFailed(error.message);
+            }
