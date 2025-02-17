@@ -1,7 +1,7 @@
 name: publish-javadoc.yml
 on:
   release:
-    types: [published]
+    types: [released]
 
 jobs:
   publish:
