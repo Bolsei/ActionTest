@@ -43,20 +43,35 @@ jobs:
           GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
         run: echo "The git tag is $GIT_TAG"
 
-      - name: Create github release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
-        run: curl -X GET --oauth2-bearer "$GITHUB_TOKEN" "https://api.github.com/repos/Bolsei/ActionTest/releases/tags/$GIT_TAG"
-#        -d '{"tag_name":"$GIT_TAG","name":"$GIT_TAG"}'
+#      - name: Create GitHub Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          tag_name: v${{ github.event.inputs.releaseVersion }}
+#          name: Release v${{ github.event.inputs.releaseVersion }}
+#          body: ${{ steps.changelog.outputs.changelog }}
+#          files: |
+#            target/*.jar
+#            target/*.pom
+#          draft: true
+#          prerelease: false
+#          env:
+#            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 #      - name: Create github release
-#        uses: actions/create-release@v1
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
-#        with:
-#          tag_name: "$GIT_TAG"
-#          release_name: "$GIT_TAG"
-#          commitish: "main"
+#        run: curl -X GET --oauth2-bearer "$GITHUB_TOKEN" "https://api.github.com/repos/Bolsei/ActionTest/releases/tags/$GIT_TAG"
+##        -d '{"tag_name":"$GIT_TAG","name":"$GIT_TAG"}'
+
+
+      - name: Create github release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
+        with:
+          tag_name: "$GIT_TAG"
+          release_name: "$GIT_TAG"
+          commitish: "main"
