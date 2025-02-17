@@ -51,3 +51,4 @@ jobs:
         with:
           tag_name: "$GIT_TAG"
           release_name: "$GIT_TAG"
+          commitish: "main"
