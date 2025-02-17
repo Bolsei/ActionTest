@@ -4,12 +4,12 @@
 
     <groupId>de.stillloading</groupId>
     <artifactId>actiontest</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
 
     <scm>
         <connection>scm:git:https://github.com/Bolsei/ActionTest</connection>
         <developerConnection>scm:git:https://github.com/Bolsei/ActionTest</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.5</tag>
   </scm>
 
 
