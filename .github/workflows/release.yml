@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create Release
+      - name: Set up jdk
         id: create_release
         uses: actions/setup-java@v4
         with:
@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build with Maven
+      - name: Prepare and perform release with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -28,3 +28,11 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Bolsei"
           mvn release:prepare release:perform --file pom.xml
+
+      - name: Create github release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
