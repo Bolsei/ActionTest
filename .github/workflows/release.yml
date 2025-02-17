@@ -32,8 +32,11 @@ jobs:
       - name: Set git tag
         id: set-tag
         run: |
-          git describe --tags --abbrev=0 >> TAG
-          echo "GIT_TAG=$TAG" >> "$GITHUB_OUTPUT"
+          {
+            echo 'GIT_TAG<<EOF'
+            git describe --tags --abbrev=0
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
 
       - name: Get git tag
         env:
