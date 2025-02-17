@@ -31,7 +31,9 @@ jobs:
 
       - name: Set git tag
         id: set-tag
-        run: echo "GIT_TAG=git describe --tags --abbrev=0" >> "$GITHUB_OUTPUT"
+        run: |
+          git describe --tags --abbrev=0 >> TAG
+          echo "GIT_TAG=$TAG" >> "$GITHUB_OUTPUT"
 
       - name: Get git tag
         env:
@@ -44,5 +46,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
         with:
-          tag_name: $GIT_TAG
-          release_name: $GIT_TAG
+          tag_name: $ {{ GIT_TAG }}
+          release_name: "$GIT_TAG"
