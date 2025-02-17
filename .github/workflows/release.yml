@@ -44,11 +44,18 @@ jobs:
         run: echo "The git tag is $GIT_TAG"
 
       - name: Create github release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
-        with:
-          tag_name: "$GIT_TAG"
-          release_name: "$GIT_TAG"
-          commitish: "main"
+        run: curl -X POST --oauth2-bearer "$GITHUB_TOKEN" "https://api.github.com/repos/Bolsei/ActionTest/releases" -d '{"tag_name":"$GIT_TAG","name":"$GIT_TAG"}'
+
+
+#      - name: Create github release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
+#        with:
+#          tag_name: "$GIT_TAG"
+#          release_name: "$GIT_TAG"
+#          commitish: "main"
