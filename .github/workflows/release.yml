@@ -47,7 +47,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
-        run: curl -X POST --oauth2-bearer "$GITHUB_TOKEN" "https://api.github.com/repos/Bolsei/ActionTest/releases" -d '{"tag_name":"$GIT_TAG","name":"$GIT_TAG"}'
+        run: curl -X GET --oauth2-bearer "$GITHUB_TOKEN" "https://api.github.com/repos/Bolsei/ActionTest/releases/tags/$GIT_TAG"
+#        -d '{"tag_name":"$GIT_TAG","name":"$GIT_TAG"}'
 
 
 #      - name: Create github release
