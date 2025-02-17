@@ -28,12 +28,21 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Bolsei"
           mvn release:prepare release:perform --file pom.xml
-          echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+
+      - name: Set git tag
+        id: set-tag
+        run: echo "GIT_TAG=git describe --tags --abbrev=0" >> "$GITHUB_OUTPUT"
+
+      - name: Get git tag
+        env:
+          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
+        run: echo "The git tag is $GIT_TAG"
 
       - name: Create github release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
         with:
-          tag_name: ${{ github.env.GIT_TAG }}
-          release_name: ${{ github.env.GIT_TAG }}
+          tag_name: $GIT_TAG
+          release_name: $GIT_TAG
