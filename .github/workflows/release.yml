@@ -72,6 +72,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
         with:
-          tag_name: "$GIT_TAG"
-          release_name: "$GIT_TAG"
-          commitish: "main"
+          tag_name: v.1.14
+          release_name: v.1.14
