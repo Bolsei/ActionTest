@@ -43,27 +43,7 @@ jobs:
           GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
         run: echo "The git tag is $GIT_TAG"
 
-#      - name: Create GitHub Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          tag_name: v${{ github.event.inputs.releaseVersion }}
-#          name: Release v${{ github.event.inputs.releaseVersion }}
-#          body: ${{ steps.changelog.outputs.changelog }}
-#          files: |
-#            target/*.jar
-#            target/*.pom
-#          draft: true
-#          prerelease: false
-#          env:
-#            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-#      - name: Create github release
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
-#        run: curl -X GET --oauth2-bearer "$GITHUB_TOKEN" "https://api.github.com/repos/Bolsei/ActionTest/releases/tags/$GIT_TAG"
-##        -d '{"tag_name":"$GIT_TAG","name":"$GIT_TAG"}'
 
 
       - name: Create github release
@@ -74,3 +54,19 @@ jobs:
         with:
           tag_name: ${{env.GIT_TAG}}
           release_name: ${{env.GIT_TAG}}
+
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # if you have a protection rule on your repository, you'll need to give write permission to the workflow.
+    steps:
+      - name: Deploy JavaDoc 🚀
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-branch: javadoc
+          java-version: 17
+          target-folder: javadoc # url will be https://<username>.github.io/<repo>/javadoc, This can be left as nothing to generate javadocs in the root folder.
+          project: maven # or gradle
+          # subdirectories: moduleA moduleB #for subdirectories support, needs to be run with custom command
