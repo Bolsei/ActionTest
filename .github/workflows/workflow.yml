@@ -30,6 +30,14 @@ jobs:
           echo "FOO=HelloWorld" >> "$GITHUB_OUTPUT"
           echo "BAR=42" >> "$GITHUB_OUTPUT"
 
+      - name: first output
+        run: |
+          echo "FOO in this job: ${{ steps.set-vars.outputs.FOO }}"
+          echo "BAR in this job: ${{ steps.set-vars.outputs.BAR }}"
+          echo "ARTIFACT_ID: ${{ steps.set-vars.outputs.ARTIFACT_ID }}"
+          echo "VERSION: ${{ steps.set-vars.outputs.VERSION }}"
+          echo "GROUP_PATH: ${{ steps.set-vars.outputs.GROUP_PATH }}"
+
   use-outputs:
     runs-on: ubuntu-latest
     needs: generate-outputs
