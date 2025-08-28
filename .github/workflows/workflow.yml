@@ -9,9 +9,23 @@ jobs:
     outputs:
       FOO: ${{ steps.set-vars.outputs.FOO }}
       BAR: ${{ steps.set-vars.outputs.BAR }}
+      ARTIFACT_ID: ${{ steps.set-vars.outputs.ARTIFACT_ID }}
+      VERSION: ${{ steps.set-vars.outputs.VERSION }}
+      GROUP_PATH: ${{ steps.set-vars.outputs.GROUP_PATH }}
     steps:
       - id: set-vars
         run: |
+          GROUP_ID=$(mvn help:evaluate -f pom.xml -Dexpression=project.groupId -q -DforceStdout)
+          ARTIFACT_ID=$(mvn help:evaluate -f pom.xml -Dexpression=project.artifactId -q -DforceStdout)
+          VERSION=$(mvn help:evaluate -f pom.xml -Dexpression=project.version -q -DforceStdout)
+          GROUP_PATH=${GROUP_ID//./\/}
+          echo "GROUP_ID=$GROUP_ID" >> $GITHUB_ENV
+          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "GROUP_PATH=$GROUP_PATH" >> $GITHUB_ENV
+          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "GROUP_PATH=$GROUP_PATH" >> $GITHUB_OUTPUT
           echo "FOO=HelloWorld" >> "$GITHUB_OUTPUT"
           echo "BAR=42" >> "$GITHUB_OUTPUT"
 
@@ -23,3 +37,6 @@ jobs:
         run: |
           echo "FOO from previous job: ${{ needs.generate-outputs.outputs.FOO }}"
           echo "BAR from previous job: ${{ needs.generate-outputs.outputs.BAR }}"
+          echo "ARTIFACT_ID from previous job: ${{ needs.generate-outputs.outputs.ARTIFACT_ID }}"
+          echo "VERSION from previous job: ${{ needs.generate-outputs.outputs.VERSION }}"
+          echo "GROUP_PATH from previous job: ${{ needs.generate-outputs.outputs.GROUP_PATH }}"
