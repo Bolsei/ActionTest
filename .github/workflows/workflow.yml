@@ -15,9 +15,9 @@ jobs:
     steps:
       - id: set-vars
         run: |
-          GROUP_ID=$(mvn help:evaluate -f pom.xml -Dexpression=project.groupId -q -DforceStdout)
-          ARTIFACT_ID=$(mvn help:evaluate -f pom.xml -Dexpression=project.artifactId -q -DforceStdout)
-          VERSION=$(mvn help:evaluate -f pom.xml -Dexpression=project.version -q -DforceStdout)
+          GROUP_ID=still
+          ARTIFACT_ID=action
+          VERSION=1.0.0
           GROUP_PATH=${GROUP_ID//./\/}
           echo "GROUP_ID=$GROUP_ID" >> $GITHUB_ENV
           echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV
