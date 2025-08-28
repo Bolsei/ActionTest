@@ -23,9 +23,9 @@ jobs:
       - name: Extract Maven coordinates (njams-sdk)
         id: extract-maven-coordinates
         run: |
-          GROUP_ID=$(mvn help:evaluate -f njams-sdk/pom.xml -Dexpression=project.groupId -q -DforceStdout)
-          ARTIFACT_ID=$(mvn help:evaluate -f njams-sdk/pom.xml -Dexpression=project.artifactId -q -DforceStdout)
-          VERSION=$(mvn help:evaluate -f njams-sdk/pom.xml -Dexpression=project.version -q -DforceStdout)
+          GROUP_ID=$(mvn help:evaluate -f pom.xml -Dexpression=project.groupId -q -DforceStdout)
+          ARTIFACT_ID=$(mvn help:evaluate -f pom.xml -Dexpression=project.artifactId -q -DforceStdout)
+          VERSION=$(mvn help:evaluate -f pom.xml -Dexpression=project.version -q -DforceStdout)
           GROUP_PATH=${GROUP_ID//./\/}
           echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
