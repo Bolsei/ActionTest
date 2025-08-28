@@ -1,0 +1,25 @@
+name: Two-Job Output Example (Modern)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-outputs:
+    runs-on: ubuntu-latest
+    outputs:
+      FOO: ${{ steps.set-vars.outputs.FOO }}
+      BAR: ${{ steps.set-vars.outputs.BAR }}
+    steps:
+      - id: set-vars
+        run: |
+          echo "FOO=HelloWorld" >> "$GITHUB_OUTPUT"
+          echo "BAR=42" >> "$GITHUB_OUTPUT"
+
+  use-outputs:
+    runs-on: ubuntu-latest
+    needs: generate-outputs
+    steps:
+      - name: Show outputs
+        run: |
+          echo "FOO from previous job: ${{ needs.generate-outputs.outputs.FOO }}"
+          echo "BAR from previous job: ${{ needs.generate-outputs.outputs.BAR }}"
