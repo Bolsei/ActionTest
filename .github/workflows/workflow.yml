@@ -13,7 +13,7 @@ jobs:
       VERSION: ${{ steps.extract.outputs.VERSION }}
       GROUP_PATH: ${{ steps.extract.outputs.GROUP_PATH }}
     steps:
-      - id: set-vars
+      - name: set vars
         run: |
           GROUP_ID=still
           ARTIFACT_ID=action
