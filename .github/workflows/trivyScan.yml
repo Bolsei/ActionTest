@@ -20,6 +20,17 @@ jobs:
           java-version: 17
           cache: maven
 
+      - name: Extract Maven coordinates (njams-sdk)
+        id: extract-maven-coordinates
+        run: |
+          GROUP_ID=$(mvn help:evaluate -f njams-sdk/pom.xml -Dexpression=project.groupId -q -DforceStdout)
+          ARTIFACT_ID=$(mvn help:evaluate -f njams-sdk/pom.xml -Dexpression=project.artifactId -q -DforceStdout)
+          VERSION=$(mvn help:evaluate -f njams-sdk/pom.xml -Dexpression=project.version -q -DforceStdout)
+          GROUP_PATH=${GROUP_ID//./\/}
+          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "GROUP_PATH=$GROUP_PATH" >> $GITHUB_ENV
+
       - name: Build JAR
         run: mvn -B clean package -DskipTests
 
@@ -27,7 +38,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          scan-ref: target/actiontest-1.24-SNAPSHOT.jar
+          scan-ref: target/${{ env.ARTIFACT_ID }}-${{  env.VERSION  }}.jar
           format: table
           exit-code: 1   # schlägt fehl, wenn Vulnerabilities gefunden werden
           severity: CRITICAL,HIGH
