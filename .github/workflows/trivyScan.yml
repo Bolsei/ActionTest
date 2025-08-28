@@ -27,7 +27,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          scan-ref: target/*.jar
+          scan-ref: target/actiontest-1.24-SNAPSHOT.jar
           format: table
           exit-code: 1   # schlägt fehl, wenn Vulnerabilities gefunden werden
           severity: CRITICAL,HIGH
