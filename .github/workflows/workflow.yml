@@ -7,14 +7,13 @@ jobs:
   generate-outputs:
     runs-on: ubuntu-latest
     outputs:
-      FOO: ${{ steps.extract.outputs.FOO }}
-      BAR: ${{ steps.extract.outputs.BAR }}
-      ARTIFACT_ID: ${{ steps.extract.outputs.ARTIFACT_ID }}
-      VERSION: ${{ steps.extract.outputs.VERSION }}
-      GROUP_PATH: ${{ steps.extract.outputs.GROUP_PATH }}
+      FOO: ${{ steps.set-vars.outputs.FOO }}
+      BAR: ${{ steps.set-vars.outputs.BAR }}
+      ARTIFACT_ID: ${{ steps.set-vars.outputs.ARTIFACT_ID }}
+      VERSION: ${{ steps.set-vars.outputs.VERSION }}
+      GROUP_PATH: ${{ steps.set-vars.outputs.GROUP_PATH }}
     steps:
-      - id: set-vars
-        name: set vars
+      - name: set-vars
         run: |
           GROUP_ID=still
           ARTIFACT_ID=action
