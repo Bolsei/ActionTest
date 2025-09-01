@@ -29,9 +29,17 @@
                         <version>3.0.0</version>
                         <executions>
                             <execution>
-                                <phase>validate</phase>
+                                <id>checkstyle-report</id>
+                                <phase>site</phase>
                                 <goals>
                                     <goal>checkstyle</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>checkstyle-check</id>
+                                <phase>site</phase>
+                                <goals>
+                                    <goal>check</goal>
                                 </goals>
                             </execution>
                         </executions>
