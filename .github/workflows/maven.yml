@@ -30,13 +30,13 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn -B deploy --file pom.xml
+      run: mvn -B deploy --file pom.xml -DrevisionNumberPlugin.revision=${{ github.run_number }} -DscmBranch=${{ github.ref_name }} -DscmCommit=${{ github.sha }}
 
     - name: Show run number
       run: |
         echo "Run number is ${{ github.run_number }}"
-        echo "ref_name is ${{ github.run_number }}"
-        echo "commit is ${{ github.run_number }}"
+        echo "ref_name is ${{ github.ref_name }}"
+        echo "commit is ${{ github.sha }}"
 
     - name: Create checkstyle report
       run: mvn -B site --file pom.xml -Pcheckstyle
