@@ -40,4 +40,4 @@ jobs:
         path: target/site
 
     - name: Check on Error
-      run: mvn -B validate --file pom.xml
+      run: mvn -B validate --file pom.xml -Pcheckstyle
