@@ -49,16 +49,20 @@
                                     <goal>checkstyle</goal>
                                 </goals>
                             </execution>
+
+                            <!-- 🚩 Prüfung mit Build-Abbruch -->
                             <execution>
                                 <id>checkstyle-check</id>
-                                <phase>site</phase>
+                                <phase>validate</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
+                                <configuration>
+                                    <failsOnError>true</failsOnError>
+                                </configuration>
                             </execution>
                         </executions>
                         <configuration>
-                            <failsOnError>true</failsOnError>
                             <configLocation>src/main/resources/checkstyle.xml</configLocation>
                         </configuration>
                     </plugin>

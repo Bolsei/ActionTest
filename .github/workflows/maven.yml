@@ -30,7 +30,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Checkstyle
+    - name: Create checkstyle report
       run: mvn -B site --file pom.xml -Pcheckstyle
 
     - name: Upload Checkstyle report
@@ -38,3 +38,6 @@ jobs:
       with:
         name: checkstyle-report
         path: target/site
+
+    - name: Check on Error
+      run: mvn -B validate --file pom.xml
