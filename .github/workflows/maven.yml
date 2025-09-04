@@ -48,7 +48,7 @@ jobs:
         path: target/site
 
     - name: Check on Error
-      run: mvn -B validate --file pom.xml -Pcheckstyle
+      run: mvn -B -N validate --file pom.xml -Pcheckstyle
 
   build-sdk:
 
