@@ -39,7 +39,7 @@ jobs:
         echo "commit is ${{ github.sha }}"
 
     - name: Create checkstyle report
-      run: mvn -B site --file pom.xml -Pcheckstyle
+      run: mvn -B -N site --file pom.xml -Pcheckstyle
 
     - name: Upload Checkstyle report
       uses: actions/upload-artifact@v4
