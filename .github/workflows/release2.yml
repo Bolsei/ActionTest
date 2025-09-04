@@ -38,7 +38,7 @@ jobs:
 
       - name: Run Maven Release
         run: |
-          mvn -B release:prepare release:perform --file sdk/pom.xml \
+          mvn -B -N release:prepare release:perform --file pom.xml \
             -DreleaseVersion=${{ github.event.inputs.version }} \
             -DdevelopmentVersion=${{ github.event.inputs.version }}-SNAPSHOT \
             -DpushChanges=true
