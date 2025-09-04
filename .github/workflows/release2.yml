@@ -11,8 +11,7 @@ on:
         description: "Release version (e.g. 1.0.0)"
         required: true
 
-permissions:
-  contents: write
+permissions: write-all
 
 jobs:
   release:
