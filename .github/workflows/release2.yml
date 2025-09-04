@@ -45,26 +45,14 @@ jobs:
             -DdevelopmentVersion=${{ github.event.inputs.version }}-SNAPSHOT \
             -DpushChanges=true
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
+      - name: Create GitHub Release with JARs
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.version }}
-          release_name: Release ${{ github.event.inputs.version }}
-          draft: false
+          name: Release ${{ github.event.inputs.version }}
+          files: target/*.jar
           prerelease: ${{ github.event.inputs.prerelease }}
-
-
-
-      - name: Upload all JARs
-        env:
-          UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          for file in target/*.jar; do
-            echo "Uploading $file ..."
-            gh release upload $UPLOAD_URL "$file"
-          done
 
 
