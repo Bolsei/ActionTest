@@ -1,0 +1,43 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to release from"
+        required: true
+        default: "main"
+      version:
+        description: "Release version (e.g. 1.0.0)"
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          fetch-depth: 0   # wichtig, sonst fehlen Tags für release:prepare
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run Maven Release
+        run: |
+          mvn -B release:prepare release:perform \
+            -DreleaseVersion=${{ github.event.inputs.version }} \
+            -DdevelopmentVersion=${{ github.event.inputs.version }}-SNAPSHOT \
+            -DpushChanges=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
