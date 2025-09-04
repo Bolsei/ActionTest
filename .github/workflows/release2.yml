@@ -10,6 +10,10 @@ on:
       version:
         description: "Release version (e.g. 1.0.0)"
         required: true
+      prerelease:
+        description: "Is this a prerelease?"
+        required: true
+        default: "false"
 
 permissions: write-all
 
@@ -49,7 +53,7 @@ jobs:
           tag_name: ${{ github.event.inputs.version }}
           release_name: Release ${{ github.event.inputs.version }}
           draft: false
-          prerelease: false
+          prerelease: ${{ github.event.inputs.prerelease }}
 
 
 
