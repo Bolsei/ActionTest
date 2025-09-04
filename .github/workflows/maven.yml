@@ -84,4 +84,4 @@ jobs:
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B deploy --file sample/pom.xml -DrevisionNumberPlugin.revision=${{ github.run_number }} -DscmBranch=${{ github.ref_name }} -DscmCommit=${{ github.sha }}
+        run: mvn -B deploy --file sample/pom.xml -Pgithub
