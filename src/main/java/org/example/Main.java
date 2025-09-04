@@ -8,10 +8,10 @@ package org.example;
  */
 public class Main {
 
-    /**
-     * The maximum value allowed.
-     */
-    public static final int maxValue = 5;
+//    /**
+//     * The maximum value allowed.
+//     */
+//    public static final int maxValue = 5;
 
     public static void main(String[] args) {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
