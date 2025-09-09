@@ -4,7 +4,7 @@ package org.example;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
 /**
- * Main Call
+ * Hier ein kaputter Inline-Tag: {@link NichtExistierendeKlasse
  */
 public class Main {
 
