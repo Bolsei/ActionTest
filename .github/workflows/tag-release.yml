@@ -1,0 +1,46 @@
+name: Tag Release After Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  tag-release:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Release ')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from PR title
+        id: get_version
+        run: |
+          VERSION=$(echo "${{ github.event.pull_request.title }}" | sed -E 's/Release ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag v${{ steps.get_version.outputs.version }}
+          git push origin v${{ steps.get_version.outputs.version }}
+
+      - name: Maybe Create Maintenance Branch
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          BRANCH="release/${MAJOR}.${MINOR}.x"
+
+          if [ "$PATCH" = "0" ]; then
+            echo "Creating maintenance branch $BRANCH"
+            git checkout -b $BRANCH
+            git push origin $BRANCH
+          else
+            echo "No maintenance branch needed for $VERSION"
+          fi
