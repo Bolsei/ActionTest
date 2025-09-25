@@ -1,0 +1,70 @@
+name: Set Next Snapshot Version
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-snapshot:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Release ')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Set next snapshot version
+        id: snapshot
+        run: |
+          RELEASE=$(echo "${{ github.event.pull_request.title }}" | sed -E 's/Release ([0-9A-Za-z.-]+).*/\1/')
+          if [[ "$RELEASE" == *-* ]]; then
+            # PreRelease -> gleiche Basisversion
+            BASE=$(echo $RELEASE | sed -E 's/-[A-Za-z0-9.]+//')
+            SNAPSHOT="${BASE}-SNAPSHOT"
+          else
+            # Normales Release -> Patch +1
+            BASE=${RELEASE%.*}
+            PATCH=${RELEASE##*.}
+            NEXT=$((PATCH + 1))
+            SNAPSHOT="${BASE}.${NEXT}-SNAPSHOT"
+          fi
+
+          echo "Next snapshot version: $SNAPSHOT"
+          mvn versions:set -DnewVersion=$SNAPSHOT
+          mvn versions:commit
+          echo "snapshot=$SNAPSHOT" >> $GITHUB_OUTPUT
+
+      - name: Commit snapshot version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b bump-snapshot/${{ steps.snapshot.outputs.snapshot }}
+          git add .
+          git commit -m "chore: set next snapshot version ${{ steps.snapshot.outputs.snapshot }}"
+
+      - name: Push snapshot branch
+        run: git push origin bump-snapshot/${{ steps.snapshot.outputs.snapshot }}
+
+      - name: Create PR for snapshot
+        id: snapshot-pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bump-snapshot/${{ steps.snapshot.outputs.snapshot }}
+          base: ${{ github.event.pull_request.base.ref }}
+          title: "Prepare next snapshot ${{ steps.snapshot.outputs.snapshot }}"
+          body: "Automated PR to set next snapshot version."
+          labels: snapshot
+
+      - name: Enable Auto-Merge for snapshot PR
+        if: steps.snapshot-pr.outputs.pull-request-number != ''
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.snapshot-pr.outputs.pull-request-number }}
+          merge-method: squash

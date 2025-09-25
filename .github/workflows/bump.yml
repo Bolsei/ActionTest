@@ -1,8 +1,4 @@
-name: Bump Version and Create PR
-
-permissions:
-  contents: write      # erlaubt push & branch erstellen
-  pull-requests: write # erlaubt PR erstellen und auto-merge
+name: Bump Release Version and Create PR
 
 on:
   workflow_dispatch:
@@ -12,17 +8,20 @@ on:
         required: true
         default: "master"
       newVersion:
-        description: "Neue Release-Version (z.B. 1.2.4 oder 1.3.0-RC1)"
+        description: "Neue Release-Version (z.B. 3.0.0 oder 3.0.0-RC1)"
         required: true
       preRelease:
         description: "Ist dies ein Pre-Release?"
         type: boolean
         default: false
 
-jobs:
-  bump-version:
-    runs-on: ubuntu-latest
+permissions:
+  contents: write
+  pull-requests: write
 
+jobs:
+  bump-release:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,32 +48,6 @@ jobs:
           git add .
           git commit -m "chore: release version ${{ github.event.inputs.newVersion }}"
 
-      - name: Determine next snapshot version
-        id: next_snapshot
-        run: |
-          RELEASE="${{ github.event.inputs.newVersion }}"
-
-          if [ "${{ github.event.inputs.preRelease }}" = "true" ]; then
-            # Bei Pre-Release bleibt die Basis-Version erhalten
-            BASE=$(echo $RELEASE | sed -E 's/-[A-Za-z0-9.]+//')
-            SNAPSHOT="${BASE}-SNAPSHOT"
-          else
-            BASE=${RELEASE%.*}
-            PATCH=${RELEASE##*.}
-            NEXT=$((PATCH + 1))
-            SNAPSHOT="${BASE}.${NEXT}-SNAPSHOT"
-          fi
-
-          mvn versions:set -DnewVersion=$SNAPSHOT
-          mvn versions:commit
-
-          echo "snapshot=$SNAPSHOT" >> $GITHUB_OUTPUT
-
-      - name: Commit next snapshot
-        run: |
-          git add .
-          git commit -m "chore: prepare next snapshot version ${{ steps.next_snapshot.outputs.snapshot }}"
-
       - name: Push branch
         run: git push origin bump/${{ github.event.inputs.newVersion }}
 
@@ -85,8 +58,7 @@ jobs:
           branch: bump/${{ github.event.inputs.newVersion }}
           title: "Release ${{ github.event.inputs.newVersion }}"
           body: |
-            Automated PR to bump version to `${{ github.event.inputs.newVersion }}`  
-            and prepare next snapshot `${{ steps.next_snapshot.outputs.snapshot }}`.
+            Automated PR to bump version to `${{ github.event.inputs.newVersion}`.
           base: ${{ github.event.inputs.baseBranch }}
           labels: release
 
