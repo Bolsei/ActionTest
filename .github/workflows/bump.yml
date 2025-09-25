@@ -58,7 +58,7 @@ jobs:
           branch: bump/${{ github.event.inputs.newVersion }}
           title: "Release ${{ github.event.inputs.newVersion }}"
           body: |
-            Automated PR to bump version to `${{ github.event.inputs.newVersion}`.
+            Automated PR to bump version to `${{ github.event.inputs.newVersion}}`.
           base: ${{ github.event.inputs.baseBranch }}
           labels: release
 
