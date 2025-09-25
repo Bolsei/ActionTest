@@ -1,5 +1,9 @@
 name: Bump Version and Create PR
 
+permissions:
+  contents: write      # erlaubt push & branch erstellen
+  pull-requests: write # erlaubt PR erstellen und auto-merge
+
 on:
   workflow_dispatch:
     inputs:
