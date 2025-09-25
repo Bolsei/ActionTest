@@ -61,7 +61,7 @@ jobs:
           branch: bump/${{ github.event.inputs.newVersion }}
           base: ${{ github.event.inputs.baseBranch }}
           title: "Release ${{ github.event.inputs.newVersion }}"
-          body: "Automated PR to bump version to `${{ github.event.inputs.newVersion}`."
+          body: "Automated PR to bump version to `${{ github.event.inputs.newVersion}}`."
           labels: release
 
       - name: Enable Auto-Merge for release PR
