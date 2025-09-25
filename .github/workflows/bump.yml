@@ -23,7 +23,7 @@ jobs:
   bump-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout base branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.baseBranch }}
@@ -35,6 +35,12 @@ jobs:
           java-version: 17
           cache: maven
 
+      - name: Create release branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b bump/${{ github.event.inputs.newVersion }}
+
       - name: Set release version in pom.xml
         run: |
           mvn versions:set -DnewVersion=${{ github.event.inputs.newVersion }}
@@ -42,13 +48,10 @@ jobs:
 
       - name: Commit release version
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b bump/${{ github.event.inputs.newVersion }}
           git add .
           git commit -m "chore: release version ${{ github.event.inputs.newVersion }}"
 
-      - name: Push branch
+      - name: Push release branch
         run: git push origin bump/${{ github.event.inputs.newVersion }}
 
       - name: Create Pull Request
@@ -56,14 +59,13 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           branch: bump/${{ github.event.inputs.newVersion }}
-          title: "Release ${{ github.event.inputs.newVersion }}"
-          body: |
-            Automated PR to bump version to `${{ github.event.inputs.newVersion}}`.
           base: ${{ github.event.inputs.baseBranch }}
+          title: "Release ${{ github.event.inputs.newVersion }}"
+          body: "Automated PR to bump version to `${{ github.event.inputs.newVersion}`."
           labels: release
 
-      - name: Enable Auto-Merge (only for release PRs)
-        if: startsWith(steps.cpr.outputs.pull-request-title, 'Release ')
+      - name: Enable Auto-Merge for release PR
+        if: steps.cpr.outputs.pull-request-number != ''
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

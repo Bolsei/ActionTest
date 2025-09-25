@@ -34,17 +34,21 @@ jobs:
             NEXT=$((PATCH + 1))
             SNAPSHOT="${BASE}.${NEXT}-SNAPSHOT"
           fi
-
-          echo "Next snapshot version: $SNAPSHOT"
-          mvn versions:set -DnewVersion=$SNAPSHOT
-          mvn versions:commit
           echo "snapshot=$SNAPSHOT" >> $GITHUB_OUTPUT
 
-      - name: Commit snapshot version
+      - name: Create snapshot branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b bump-snapshot/${{ steps.snapshot.outputs.snapshot }}
+
+      - name: Apply snapshot version
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.snapshot.outputs.snapshot }}
+          mvn versions:commit
+
+      - name: Commit snapshot
+        run: |
           git add .
           git commit -m "chore: set next snapshot version ${{ steps.snapshot.outputs.snapshot }}"
 
