@@ -65,7 +65,7 @@ jobs:
           labels: release
 
       - name: Enable Auto-Merge for release PR
-        if: steps.cpr.outputs.pull-request-number != ''
+        if: ${{ steps.cpr.outputs.pull-request-number != '' }}
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
